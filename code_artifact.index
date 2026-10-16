@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서귀포시 복지 현황 및 맞춤형 지원 계획 발표</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Google Fonts: Montserrat & Noto Sans KR -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: '#0064e0',
+              deep: '#0457cb',
+              soft: '#0091ff',
+              light: '#eef5fc'
+            },
+            ink: {
+              deep: '#0a1317',
+              base: '#1c1e21',
+              charcoal: '#444950',
+              steel: '#5d6c7b',
+              surface: '#f1f4f7'
+            }
+          },
+          fontFamily: {
+            sans: ['Montserrat', 'Noto Sans KR', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+      background-color: #0b1118;
+      color: #1c1e21;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Fixed 16:9 Presentation Viewport Scaler */
+    #slide-viewport {
+      width: 1280px;
+      height: 720px;
+      transform-origin: top center;
+      transition: transform 0.15s ease-out;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Slide visibility transition */
+    .slide-page {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+    }
+    .slide-page.active {
+      display: flex;
+      flex-direction: column;
+      animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Progress bar */
+    .progress-bar-glow {
+      box-shadow: 0 0 10px rgba(0, 145, 255, 0.8);
+    }
+
+    /* Custom thin scrollbar for drawer */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between select-none">
+
+  <!-- Top Navigation & Presentation Controls Bar -->
+  <header class="w-full bg-[#111827]/90 backdrop-blur border-b border-gray-800 text-white z-50 px-4 py-2 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white shadow">
+        <i class="fa-solid fa-chart-line text-sm"></i>
+      </div>
+      <div>
+        <div class="flex items-center space-x-2">
+          <span class="text-sm font-bold tracking-tight text-white">서귀포시 복지수급 현황 및 지원 계획</span>
+          <span class="text-[10px] bg-blue-500/20 text-blue-400 border border-blue-400/30 px-2 py-0.5 rounded-full font-semibold">2026 최종 검증안</span>
+        </div>
+        <p class="text-[11px] text-gray-400 hidden sm:block">단일 시점 원본 검증 기반 17개 읍면동 진단과 4단계 점진적 실행체계</p>
+      </div>
+    </div>
+
+    <!-- Slide Navigation Tools -->
+    <div class="flex items-center space-x-2 sm:space-x-4">
+      <!-- Slide Counter Badge -->
+      <div class="bg-gray-800 text-gray-200 px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1.5 border border-gray-700">
+        <span id="current-slide-num" class="text-blue-400 font-bold">1</span>
+        <span class="text-gray-500">/</span>
+        <span id="total-slide-num">12</span>
+      </div>
+
+      <!-- Arrow Buttons -->
+      <div class="flex items-center space-x-1">
+        <button id="prevBtn" onclick="prevSlide()" class="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition disabled:opacity-40" title="이전 슬라이드 (← 키)">
+          <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <button id="nextBtn" onclick="nextSlide()" class="p-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white transition shadow disabled:opacity-40" title="다음 슬라이드 (→ 키 또는 Space)">
+          <i class="fa-solid fa-chevron-right text-xs"></i>
+        </button>
+      </div>
+
+      <!-- Quick Index Drawer Toggle -->
+      <button onclick="toggleDrawer()" class="px-2.5 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-xs text-gray-300 hover:text-white transition flex items-center space-x-1.5 border border-gray-700">
+        <i class="fa-solid fa-grip-lines"></i>
+        <span class="hidden md:inline">목록보기</span>
+      </button>
+
+      <!-- Fullscreen Toggle -->
+      <button onclick="toggleFullscreen()" class="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition" title="전체화면 전환 (F 키)">
+        <i class="fa-solid fa-expand text-xs"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Progress Tracker Line -->
+  <div class="w-full bg-gray-800 h-1">
+    <div id="slideProgressBar" class="h-full bg-blue-500 transition-all duration-300 progress-bar-glow" style="width: 8.33%;"></div>
+  </div>
+
+  <!-- Main Presentation Stage (Scale-Preserving 16:9 Aspect Frame) -->
+  <main class="flex-1 flex items-center justify-center p-2 sm:p-4 overflow-hidden">
+    <div id="slide-stage-wrapper" class="relative">
+      <div id="slide-viewport" class="relative bg-white rounded-2xl overflow-hidden border border-gray-700">
+
+        <!-- ========================================== -->
+        <!-- SLIDE 1: Title (Dark Ground Hero) -->
+        <!-- ========================================== -->
+        <section class="slide-page active bg-[#0a1317] text-white p-14 sm:p-16 justify-between" id="slide-1">
+          <div class="flex justify-between items-center">
+            <span class="text-xs sm:text-sm font-bold tracking-[2px] text-[#0091ff]">
+              SEOGWIPO WELFARE STRATEGY 2026
+            </span>
+            <div class="flex items-center space-x-2 bg-[#1c1e21] border border-gray-700 px-3 py-1 rounded-full text-xs text-gray-300 font-semibold">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>2024 공공데이터 원본 검증</span>
+            </div>
+          </div>
+
+          <div class="max-w-4xl py-6">
+            <div class="w-12 h-1 bg-[#0064e0] rounded-full mb-6"></div>
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight mb-5">
+              서귀포시 읍면동별 복지 수급 현황 진단 및 지원 계획
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-400 font-normal leading-relaxed">
+              데이터 정합성 검증 기반의 17개 읍면동 실태 분석과 4단계 점진적 실행 로드맵
+            </p>
+          </div>
+
+          <div class="flex justify-between items-end border-t border-gray-800 pt-5">
+            <div>
+              <p class="text-xs text-gray-500">분석 기준일: 2024-04-30 (공공데이터 포털 원본 확정)</p>
+              <p class="text-xs text-gray-400 font-medium mt-0.5">보고서 작성: 2026-10-15 (최종보고서 기준)</p>
+            </div>
+            <span class="text-xs tracking-wider uppercase font-bold text-blue-400 bg-blue-950/60 border border-blue-800 px-4 py-1.5 rounded-full">
+              EXECUTIVE REPORT
+            </span>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 2: Data Integrity & Error Correction -->
+        <!-- ========================================== -->
+        <section class="slide-page bg-white p-12 sm:p-14 justify-between" id="slide-2">
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-xs font-bold tracking-widest text-[#0064e0] uppercase">DATA INTEGRITY & PRINCIPLES</span>
+              <span class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-semibold">데이터 품질 원칙</span>
+            </div>
+            <h2 class="text-3xl font-extrabold text-ink-deep tracking-tight">
+              데이터 품질 원칙 및 오류 정정 내역
+            </h2>
+            <p class="text-sm text-ink-steel mt-1">
+              초안의 임의 보간값과 가상 시계열 추세 왜곡을 바로잡고 공공데이터 원본 무결성을 전면 복원했습니다.
+            </p>
+          </div>
+
+          <!-- 3 Pillars Cards -->
+          <div class="grid grid-cols-3 gap-6 my-auto">
+            <div class="border border-gray-200 bg-gray-50/70 rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-900 text-white">원자료 확정</span>
+                <h3 class="text-xl font-bold text-ink-deep mt-3 mb-2">2024년 공식 원본 분석</h3>
+                <p class="text-sm text-ink-charcoal leading-relaxed">
+                  2024년 4월 30일 공공데이터포털 확정 원자료에 집중하여 단일 시점 17개 읍면동 전수 조사를 완결했습니다.
+                </p>
+              </div>
+              <div class="pt-4 border-t border-gray-200 text-xs text-ink-steel font-medium">
+                <i class="fa-solid fa-check text-emerald-600 mr-1.5"></i>임의 데이터 확장 원천 차단
+              </div>
+            </div>
+
+            <div class="border border-blue-200 bg-blue-50/40 rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-blue-600 text-white">보간 오류 정정</span>
+                <h3 class="text-xl font-bold text-blue-900 mt-3 mb-2">초안 결측 4개 셀 정상화</h3>
+                <p class="text-sm text-ink-charcoal leading-relaxed mb-3">
+                  초안의 임의 보간 수치를 공공데이터 원본으로 정정 복원 완료했습니다:
+                </p>
+                <ul class="text-xs text-blue-800 space-y-1 font-mono bg-white p-2.5 rounded-xl border border-blue-100">
+                  <li>• 동홍동 일반가구: 868 → <b>851가구</b></li>
+                  <li>• 대천동 조건부수급자: 134 → <b>131명</b></li>
+                  <li>• 중문동 조건부수급자: 72 → <b>75명</b></li>
+                  <li>• 송산동 조건부수급자: 32 → <b>33명</b></li>
+                </ul>
+              </div>
+              <div class="pt-3 border-t border-blue-200 text-xs text-blue-900 font-semibold">
+                총합: 7,197가구 / 10,237명 확정
+              </div>
+            </div>
+
+            <div class="border border-gray-200 bg-gray-50/70 rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-rose-600 text-white">왜곡 배제</span>
+                <h3 class="text-xl font-bold text-ink-deep mt-3 mb-2">가상 시계열 해석 배제</h3>
+                <p class="text-sm text-ink-charcoal leading-relaxed">
+                  2020~2023년 데이터는 난수 노이즈(2~3%)가 합성된 교육용 가상자료로 판명되어 '안정기 진입' 등 자의적 해석을 전면 배제했습니다.
+                </p>
+              </div>
+              <div class="pt-4 border-t border-gray-200 text-xs text-rose-700 font-medium">
+                <i class="fa-solid fa-ban mr-1.5"></i>2025 이상치(-139 등) 분석 제외
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gray-100 rounded-xl p-3 text-xs text-gray-600 flex items-center justify-between">
+            <span><b>* 시설수급자 분리 관리:</b> 영천동 15명(24.6%) 등 시설수급자 61명은 시설 소재지 효과로 별도 관리</span>
+            <span class="font-bold text-blue-700">데이터 신뢰도: 공공데이터 원본 100% 일치</span>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 3: Overall Macro Scale (Key Stats) -->
+        <!-- ========================================== -->
+        <section class="slide-page bg-[#f7f9fa] p-12 sm:p-14 justify-between" id="slide-3">
+          <div class="flex justify-between items-end">
+            <div>
+              <span class="text-xs font-bold tracking-widest text-[#0064e0] uppercase">EXECUTIVE SUMMARY</span>
+              <h2 class="text-3xl font-extrabold text-ink-deep tracking-tight mt-1">
+                서귀포시 복지 수급 총괄 규모
+              </h2>
+            </div>
+            <span class="text-xs text-gray-500 font-semibold bg-white border border-gray-200 px-3 py-1 rounded-full">
+              기준일자: 2024년 4월 30일
+            </span>
+          </div>
+
+          <!-- 3 Hero Metric Cards -->
+          <div class="grid grid-cols-3 gap-6 my-auto">
+            
+            <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center text-gray-400 mb-2">
+                  <span class="text-xs font-bold tracking-wider uppercase text-gray-500">총 수급 가구수</span>
+                  <i class="fa-solid fa-house-chimney-user text-base text-gray-400"></i>
+                </div>
+                <div class="text-5xl font-black text-ink-deep leading-none my-3">
+                  7,197
+                  <span class="text-base font-semibold text-gray-500">가구</span>
+                </div>
+              </div>
+              <div class="pt-4 border-t border-gray-100 text-xs text-gray-600 flex items-center justify-between">
+                <span>일반수급 6,158 (85.6%)</span>
+                <span class="font-bold text-blue-600">서귀포시 전수</span>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 border-2 border-blue-600 shadow-md flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center text-blue-600 mb-2">
+                  <span class="text-xs font-bold tracking-wider uppercase text-blue-600">총 수급권자 수</span>
+                  <i class="fa-solid fa-users text-base text-blue-600"></i>
+                </div>
+                <div class="text-5xl font-black text-blue-600 leading-none my-3">
+                  10,237
+                  <span class="text-base font-semibold text-blue-500">명</span>
+                </div>
+              </div>
+              <div class="pt-4 border-t border-blue-100 text-xs text-blue-900 flex items-center justify-between font-semibold">
+                <span>가구당 평균 1.42명 집계</span>
+                <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">조건부가구 1.88명</span>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 border border-gray-200 shadow-sm flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center text-gray-400 mb-2">
+                  <span class="text-xs font-bold tracking-wider uppercase text-gray-500">상위 5개 지역 집중도</span>
+                  <i class="fa-solid fa-chart-pie text-base text-gray-400"></i>
+                </div>
+                <div class="text-5xl font-black text-ink-deep leading-none my-3">
+                  53.6%
+                  <span class="text-base font-semibold text-gray-500">5,487명</span>
+                </div>
+              </div>
+              <div class="pt-4 border-t border-gray-100 text-xs text-gray-600 flex items-center justify-between">
+                <span>동홍·대정·성산·남원·대천</span>
+                <span class="font-bold text-amber-600">과중업무 분산필요</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-blue-50/60 border border-blue-200 rounded-2xl p-4 text-xs text-blue-900 flex items-center space-x-3">
+              <i class="fa-solid fa-circle-info text-blue-600 text-base shrink-0"></i>
+              <span><b>조건부수급자 비중 (시평균 15.7%):</b> 읍면(13.8%) 대비 동 지역(17.0%)이 3.2%p 높게 나타남</span>
+            </div>
+            <div class="bg-gray-100 border border-gray-200 rounded-2xl p-4 text-xs text-gray-700 flex items-center space-x-3">
+              <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base shrink-0"></i>
+              <span><b>데이터 주의:</b> 성산읍 특례수급자(10가구/9명)는 원본 동일값으로 주무부서 확인 예정</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 4: Recipient Types Breakdown -->
+        <!-- ========================================== -->
+        <section class="slide-page bg-white p-12 sm:p-14 justify-between" id="slide-4">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold tracking-widest text-[#0064e0] uppercase">RECIPIENT BREAKDOWN</span>
+              <span class="text-xs text-gray-500 font-medium">총 10,237명 구성 분석</span>
+            </div>
+            <h2 class="text-3xl font-extrabold text-ink-deep tracking-tight">
+              수급 유형별 구성 비율 및 가구 규모
+            </h2>
+            <p class="text-sm text-ink-steel mt-1">
+              재가 취약계층의 82.2%는 일반수급자이며, 자활 대상 조건부수급자는 15.6%를 점유합니다.
+            </p>
+          </div>
+
+          <!-- Gauges Breakdown -->
+          <div class="space-y-4 my-auto">
+            <div>
+              <div class="flex justify-between text-sm font-bold text-ink-deep mb-1">
+                <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-slate-900 mr-2"></span>일반수급자 (8,417명 / 6,158가구)</span>
+                <span class="font-mono text-base">82.2%</span>
+              </div>
+              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-slate-900 rounded-full" style="width: 82.2%;"></div>
+              </div>
+              <div class="text-[11px] text-gray-500 mt-0.5">가구당 1.37명 / 일상 돌봄 및 기본 생계·의료 중심</div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-sm font-bold text-blue-600 mb-1">
+                <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-blue-600 mr-2"></span>조건부수급자 (1,598명 / 851가구)</span>
+                <span class="font-mono text-base">15.6%</span>
+              </div>
+              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-blue-600 rounded-full" style="width: 15.6%;"></div>
+              </div>
+              <div class="text-[11px] text-blue-700 mt-0.5 font-medium">가구당 1.88명 / 취업 및 맞춤 자활 연계 필요군</div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-sm font-bold text-gray-700 mb-1">
+                <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-gray-500 mr-2"></span>특례수급자 (161명 / 127가구)</span>
+                <span class="font-mono text-base">1.6%</span>
+              </div>
+              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-gray-500 rounded-full" style="width: 1.6%;"></div>
+              </div>
+              <div class="text-[11px] text-gray-500 mt-0.5">가구당 1.27명 / 교육·의료 등 한시 특례 지원</div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-sm font-bold text-gray-700 mb-1">
+                <span class="flex items-center"><span class="w-3 h-3 rounded-full bg-amber-500 mr-2"></span>시설수급자 (61명 / 61가구)</span>
+                <span class="font-mono text-base">0.6%</span>
+              </div>
+              <div class="h-4 bg-gray-100 rounded-full overflow-hidden">
+                <div class="h-full bg-amber-500 rounded-full" style="width: 0.6%;"></div>
+              </div>
+              <div class="text-[11px] text-gray-500 mt-0.5">1인 1가구 집계 / 영천동(15명) 시설 소재지 효과 반영</div>
+            </div>
+          </div>
+
+          <!-- Bottom Callout Box -->
+          <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200 text-xs flex justify-between items-center">
+            <span class="text-ink-charcoal">
+              <b>핵심 발견:</b> 조건부 가구당 인원(1.88명)이 일반가구(1.37명)보다 유의미하게 큼 → <strong>부양 부담과 근로 가능성 병행 판별 필수</strong>
+            </span>
+            <span class="text-blue-700 font-bold shrink-0 ml-4">가구단위 심층조사 과제</span>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 5: The Strategic Paradox -->
+        <!-- ========================================== -->
+        <section class="slide-page bg-white p-12 sm:p-14 justify-between" id="slide-5">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold tracking-widest text-[#0064e0] uppercase">STRATEGIC INSIGHT</span>
+              <span class="text-xs bg-amber-100 text-amber-800 px-3 py-0.5 rounded-full font-bold">정책 왜곡 차단</span>
+            </div>
+            <h2 class="text-3xl font-extrabold text-ink-deep tracking-tight">
+              수급 규모와 조건부 비중의 역전 현상
+            </h2>
+            <p class="text-sm text-ink-steel mt-1">
+              단순 수급자 수(규모)만으로 자원을 배분하면 자활 수요가 극대화된 구도심이 배제되는 왜곡이 발생합니다.
+            </p>
+          </div>
+
+          <!-- Comparison 2-Column Columns -->
+          <div class="grid grid-cols-2 gap-8 my-auto">
+            
+            <!-- Col 1 -->
+            <div class="border border-gray-200 bg-gray-50/70 rounded-3xl p-7 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center mb-3">
+                  <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-800 text-white">규모 최상위 그룹</span>
+                  <span class="text-xs font-bold text-rose-600"><i class="fa-solid fa-arrow-down mr-1"></i>시평균 미달</span>
+                </div>
+                <h3 class="text-2xl font-black text-ink-deep mb-2">동홍동 · 대정읍 · 성산읍</h3>
+                <p class="text-sm text-ink-charcoal leading-relaxed mb-4">
+                  수급자 절대 수는 최상위(36.6% 집적)이나, 조건부 비중은 10~15% 수준으로 시 평균(15.7%)을 밑돕니다.
+                </p>
+
+                <div class="space-y-2 text-xs bg-white p-3 rounded-xl border border-gray-200">
+                  <div class="flex justify-between">
+                    <span class="text-gray-500">수급권자 점유율:</span>
+                    <span class="font-bold">36.6% (3,745명)</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-500">조건부 비중:</span>
+                    <span class="font-bold text-slate-700">10.6% ~ 15.5%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-gray-200 mt-4 text-xs font-bold text-slate-800">
+                <i class="fa-solid fa-arrow-right text-slate-600 mr-1.5"></i>일반 사례관리 및 맞춤형 돌봄 인력 배치
+              </div>
+            </div>
+
+            <!-- Col 2 -->
+            <div class="border-2 border-blue-400 bg-blue-50/40 rounded-3xl p-7 flex flex-col justify-between">
+              <div>
+                <div class="flex justify-between items-center mb-3">
+                  <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-600 text-white">조건부 비중 최상위</span>
+                  <span class="text-xs font-bold text-blue-700"><i class="fa-solid fa-arrow-up mr-1"></i>시평균 1.3배</span>
+                </div>
+                <h3 class="text-2xl font-black text-blue-950 mb-2">중앙동 · 대륜동 · 효돈동</h3>
+                <p class="text-sm text-ink-charcoal leading-relaxed mb-4">
+                  수급자 절대 수는 작으나 조건부 비중이 20~21%로 집중되어 자활 및 근로 유인 수요가 극대화되어 있습니다.
+                </p>
+
+                <div class="space-y-2 text-xs bg-white p-3 rounded-xl border border-blue-100">
+                  <div class="flex justify-between">
+                    <span class="text-gray-500">수급권자 점유율:</span>
+                    <span class="font-bold text-blue-900">14.1% (1,439명)</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-500">조건부 비중:</span>
+                    <span class="font-bold text-blue-600">20.0% ~ 21.1%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-blue-200 mt-4 text-xs font-bold text-blue-900">
+                <i class="fa-solid fa-arrow-right text-blue-600 mr-1.5"></i>구도심 결합 공동 자활·일자리 상담창구 우선
+              </div>
+            </div>
+
+          </div>
+
+          <div class="bg-slate-900 text-white rounded-2xl p-3.5 text-xs flex justify-between items-center">
+            <span><b>정책 결정 원칙:</b> 우선순위 결정 시 <b>[절대 규모]</b>와 <b>[조건부 비중]</b> 및 추후 <b>[재가 수급률]</b>을 3중 복합 평가</span>
+            <span class="text-blue-400 font-bold">2026 최종 지침</span>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 6: Regional Status Table -->
+        <!-- ========================================== -->
+        <section class="slide-page bg-white p-12 sm:p-14 justify-between" id="slide-6">
+          <div class="flex justify-between items-end">
+            <div>
+              <span class="text-xs font-bold tracking-widest text-[#0064e0] uppercase">REGIONAL METRICS</span>
+              <h2 class="text-3xl font-extrabold text-ink-deep tracking-tight mt-1">
+                주요 읍면동 복지 수급 현황 (상위 지역 중심)
+              </h2>
+            </div>
+            <span class="text-xs text-gray-500">단위: 가구, 명, % (2024-04-30 원본)</span>
+          </div>
+
+          <!-- Structured Table -->
+          <div class="overflow-hidden border border-gray-200 rounded-2xl my-auto">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="bg-slate-900 text-white font-bold">
+                <tr>
+                  <th class="py-3 px-4">읍면동</th>
+                  <th class="py-3 px-3">구분</th>
+                  <th class="py-3 px-4 text-right">수급가구</th>
+                  <th class="py-3 px-4 text-right">수급권자(명)</th>
+                  <th class="py-3 px-4 text-right">시 점유율</th>
+                  <th class="py-3 px-4 text-right text-blue-400">조건부 비중</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr class="hover:bg-blue-50/30">
+                  <td class="py-3 px-4 font-bold text-ink-deep">동홍동</td>
+                  <td class="py-3 px-3 text-gray-500">동</td>
+                  <td class="py-3 px-4 text-right">986</td>
+                  <td class="py-3 px-4 text-right font-bold text-blue-600">1,518</td>
+                  <td class="py-3 px-4 text-right">14.8%</td>
+                  <td class="py-3 px-4 text-right font-medium">15.5%</td>
+                </tr>
+                <tr class="bg-gray-50/60 hover:bg-blue-50/30">
+                  <td class="py-3 px-4 font-bold text-ink-deep">대정읍</td>
+                  <td class="py-3 px-3 text-gray-500">읍면</td>
+                  <td class="py-3 px-4 text-right">901</td>
+                  <td class="py-3 px-4 text-right font-bold text-blue-600">1,203</td>
+                  <td class="py-3 px-4 text-right">11.8%</td>
+                  <td class="py-3 px-4 text-right font-medium">13.3%</td>
+                </tr>
+                <tr class="hover:bg-blue-50/30">
+                  <td class="py-3 px-4 font-bold text-ink-deep">성산읍</td>
+                  <td class="py-3 px-3 text-gray-500">읍면</td>
+                  <td class="py-3 px-4 text-right">745</td>
+                  <td class="py-3 px-4 text-right font-bold text-blue-600">1,024</td>
+                  <td class="py-3 px-4 text-right">10.0%</td>
+                  <td class="py-3 px-4 text-right font-medium">10.6%</td>
+                </tr>
+                <tr class="bg-gray-50/60 hover:bg-blue-50/30">
+                  <td class="py-3 px-4 font-bold text-ink-deep">남원읍</td>
+                  <td class="py-3 px-3 text-gray-500">읍면</td>
+                  <td class="py-3 px-4 text-right">653</td>
+                  <td class="py-3 px-4 text-right font-bold text-blue-600">917</td>
+                  <td class="py-3 px-4 text-right">9.0%</td>
+                  <td class="py-3 px-4 text-right font-bold text-blue-700">16.4%</td>
+                </tr>
+                <tr class="hover:bg-blue-50/30">
+                  <td class="py-3 px-4 font-bold text-ink-deep">중앙동</td>
+                  <td class="py-3 px-3 text-gray-500">동</td>
+                  <td class="py-3 px-4 text-right">354</td>
+                  <td class="py-3 px-4 text-right font-bold">464</td>
+                  <td class="py-3 px-4 text-right">4.5%</td>
+                  <td class="py-3 px-4 text-right font-black text-rose-600 bg-rose-50">21.1%</td>
+                </tr>
+              </tbody>
+              <tfoot class="bg-gray-100 font-bold border-t-2 border-gray-300">
+                <tr>
+                  <td class="py-3 px-4">서귀포시 전체 (17개 읍면동)</td>
+                  <td class="py-3 px-3">-</td>
+                  <td class="py-3 px-4 text-right">7,197</td>
+                  <td class="py-3 px-4 text-right text-blue-700 font-extrabold">10,237</td>
+                  <td class="py-3 px-4 text-right">100.0%</td>
+                  <td class="py-3 px-4 text-right text-slate-900 font-extrabold">15.7%</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <div class="text-xs text-gray-500 flex justify-between items-center">
+            <span>* 조건부 비중 = 조건부수급권자 ÷ (전체수급권자 − 시설수급권자) × 100</span>
+            <span class="text-blue-600 font-semibold">17개 읍면동 전수 데이터 검증 완료</span>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 7: 4 Typology Policy Matrix -->
+        <!-- ========================================== -->
+        <section class="slide-page bg-[#f7f9fa] p-12 sm:p-14 justify-between" id="slide-7">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold tracking-widest text-[#0064e0] uppercase">TYPOLOGY MATRIX</span>
+              <span class="text-xs bg-gray-200 text-gray-700 px-3 py-0.5 rounded-full font-bold">기준: 500명 & 15.7%</span>
+            </div>
+            <h2 class="text-3xl font-extrabold text-ink-deep tracking-tight">
+              4대 맞춤형 정책 유형 분류
+            </h2>
+            <p class="text-sm text-ink-steel mt-1">
+              획일적 지원을 지양하고 규모와 비중의 교차 분석을 통해 도출한 4개 권역별 전략
+            </p>
+          </div>
+
+          <!-- 4 Typology Cards -->
+          <div class="grid grid-cols-4 gap-4 my-auto">
+            
+            <div class="bg-white border-2 border-blue-400 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+              <div>
+                <span class="text-xs font-bold px-2 py-0.5 rounded-md bg-blue-600 text-white">TYPE A</span>
+                <p class="text-xs font-semibold text-blue-800 mt-2 mb-1">대규모 · 고비중</p>
+                <h4 class="text-base font-black text-ink-deep mb-2">남원·대천·표선·대륜·서홍</h4>
+                <p class="text-xs text-ink-charcoal leading-relaxed">
+                  수급자 500명 이상이면서 조건부 비중이 평균을 초과하는 핵심 밀집 지역입니다.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-blue-100 text-xs text-blue-900 font-bold mt-3">
+                자활·고용 + 사례관리 인력 동시 보강
+              </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+              <div>
+                <span class="text-xs font-bold px-2 py-0.5 rounded-md bg-slate-800 text-white">TYPE B</span>
+                <p class="text-xs font-semibold text-slate-700 mt-2 mb-1">대규모 · 저비중</p>
+                <h4 class="text-base font-black text-ink-deep mb-2">동홍동·대정읍·성산읍</h4>
+                <p class="text-xs text-ink-charcoal leading-relaxed">
+                  수급자 절대 수는 최상위이나 고령 독거 등 조건부 비율은 평균 미달입니다.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-gray-200 text-xs text-slate-800 font-bold mt-3">
+                일반 사례관리 & 노인·맞춤돌봄 인력 집중
+              </div>
+            </div>
+
+            <div class="bg-white border-2 border-indigo-400 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+              <div>
+                <span class="text-xs font-bold px-2 py-0.5 rounded-md bg-indigo-600 text-white">TYPE C</span>
+                <p class="text-xs font-semibold text-indigo-800 mt-2 mb-1">소규모 · 고비중</p>
+                <h4 class="text-base font-black text-ink-deep mb-2">중앙·효돈·정방·송산·예래</h4>
+                <p class="text-xs text-ink-charcoal leading-relaxed">
+                  절대 규모는 작으나 구도심 일대 조건부 비중이 17~21%로 집중된 취약지입니다.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-indigo-100 text-xs text-indigo-900 font-bold mt-3">
+                구도심 인접 동 결합 '공동 자활창구'
+              </div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
+              <div>
+                <span class="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-600 text-white">TYPE D</span>
+                <p class="text-xs font-semibold text-amber-800 mt-2 mb-1">소규모 · 저비중</p>
+                <h4 class="text-base font-black text-ink-deep mb-2">중문동·안덕면·천지·영천</h4>
+                <p class="text-xs text-ink-charcoal leading-relaxed">
+                  수급 규모와 조건부 비중이 낮으며, 영천동은 시설수급(15명)이 집중되어 있습니다.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-amber-100 text-xs text-amber-900 font-bold mt-3">
+                기본 상담 유지 및 시설수급 소재지 분리
+              </div>
+            </div>
+
+          </div>
+
+          <div class="bg-white rounded-xl p-3 border border-gray-200 text-xs text-gray-600 flex justify-between">
+            <span>* 예래동(15.72%, C형)과 중문동(15.66%, D형)은 시 평균(15.70%) 경계선으로 주민등록인구 연계 수급률 산출 시 재분류 예정</span>
+            <span class="font-semibold text-blue-600">단계적 정밀 분류 원칙</span>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 8: 4-Stage Phased Roadmap -->
+        <!-- ========================================== -->
+        <section class="slide-page bg-white p-12 sm:p-14 justify-between" id="slide-8">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold tracking-widest text-[#0064e0] uppercase">EXECUTION ROADMAP</span>
+              <span class="text-xs bg-blue-100 text-blue-700 px-3 py-0.5 rounded-full font-bold">진입 조건 필수</span>
+            </div>
+            <h2 class="text-3xl font-extrabold text-ink-deep tracking-tight">
+              4단계 점진적 실행 추진 체계
+            </h2>
+            <p class="text-sm text-ink-steel mt-1">
+              초안의 무조건적 대규모 확대를 지양하고, 각 단계 성과 검증을 전제로 순차 추진합니다.
+            </p>
+          </div>
+
+          <!-- 4 Steps Timeline -->
+          <div class="grid grid-cols-4 gap-4 my-auto">
+            
+            <div class="border border-gray-200 bg-gray-50/70 rounded-2xl p-5 flex flex-col justify-between">
+              <div>
+                <span class="text-2xl font-black text-slate-800">01</span>
+                <h4 class="text-base font-bold text-ink-deep mt-2 mb-1">즉시 정비</h4>
+                <p class="text-xs text-ink-charcoal leading-relaxed mb-3">
+                  데이터 품질 점검, 읍면동 인구 연계 재가 수급률 산출 및 복지팀 업무량 파악.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-gray-200 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">
+                0~6개월 (예산 중립)
+              </div>
+            </div>
+
+            <div class="border border-gray-200 bg-gray-50/70 rounded-2xl p-5 flex flex-col justify-between">
+              <div>
+                <span class="text-2xl font-black text-slate-800">02</span>
+                <h4 class="text-base font-bold text-ink-deep mt-2 mb-1">조사 · 평가</h4>
+                <p class="text-xs text-ink-charcoal leading-relaxed mb-3">
+                  기존 자활 성과 평가, 조건부수급자 건강·돌봄 개별평가, 읍면 접근성 심층 조사.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-gray-200 text-[11px] font-bold text-slate-700 bg-slate-200 px-2 py-1 rounded">
+                6~18개월 (심층 분석)
+              </div>
+            </div>
+
+            <div class="border-2 border-blue-400 bg-blue-50/40 rounded-2xl p-5 flex flex-col justify-between">
+              <div>
+                <span class="text-2xl font-black text-blue-600">03</span>
+                <h4 class="text-base font-bold text-blue-900 mt-2 mb-1">시범 사업</h4>
+                <p class="text-xs text-ink-charcoal leading-relaxed mb-3">
+                  구도심 공동창구 및 거점 1년 실증, 이동식 상담소 1곳 운영 (대조군 비교).
+                </p>
+              </div>
+              <div class="pt-3 border-t border-blue-200 text-[11px] font-bold text-blue-700 bg-white px-2 py-1 rounded border border-blue-200">
+                2년차 (1~2곳 실증)
+              </div>
+            </div>
+
+            <div class="border border-gray-200 bg-gray-50/70 rounded-2xl p-5 flex flex-col justify-between">
+              <div>
+                <span class="text-2xl font-black text-slate-400">04</span>
+                <h4 class="text-base font-bold text-ink-deep mt-2 mb-1">확대 · 제도화</h4>
+                <p class="text-xs text-ink-charcoal leading-relaxed mb-3">
+                  성과 검증 통과 사업에 한해 서귀포시 본예산 투입 및 조례 반영.
+                </p>
+              </div>
+              <div class="pt-3 border-t border-gray-200 text-[11px] font-bold text-gray-700 bg-gray-200 px-2 py-1 rounded">
+                3년차 이후 (본예산 투입)
+              </div>
+            </div>
+
+          </div>
+
+          <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 flex items-center justify-between">
+            <span><i class="fa-solid fa-shield-halved mr-2"></i><b>3단계 진입 전제조건:</b> 시범사업별 예산, 재원(국·도·시비), 담당 인력 및 평가 대조군 확정 후 착수</span>
+            <span class="font-bold text-blue-700">성숙도 기반 집행</span>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 9: Pilot Projects Target Regions -->
+        <!-- ========================================== -->
+        <section class="slide-page bg-white p-12 sm:p-14 justify-between" id="slide-9">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold tracking-widest text-[#0064e0] uppercase">PILOT EXPERIMENT</span>
+              <span class="text-xs text-gray-500 font-semibold">2년차 1년간 현장 실증</span>
+            </div>
+            <h2 class="text-3xl font-extrabold text-ink-deep tracking-tight">
+              핵심 시범사업 및 실증 지역
+            </h2>
+            <p class="text-sm text-ink-steel mt-1">
+              지역 고유의 특성을 반영하여 최소 비용으로 최대 실효성을 검증할 3대 실증 모델
+            </p>
+          </div>
+
+          <!-- 3 Pilot Cards -->
+          <div class="grid grid-cols-3 gap-6 my-auto">
+            
+            <div class="border border-gray-200 bg-gray-50/60 rounded-3xl p-7 flex flex-col justify-between">
+              <div>
+                <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mb-4">
+                  <i class="fa-solid fa-users"></i>
+                </div>
+                <h3 class="text-xl font-bold text-ink-deep mb-1">구도심 공동 자활상담창구</h3>
+                <p class="text-xs font-bold text-blue-600 mb-3">중앙동 + 정방동 + 송산동</p>
+                <p class="text-sm text-ink-charcoal leading-relaxed">
+                  인접 3개 동이 결합하여 단일 창구를 운영함으로써 개별 동의 인력 낭비를 막고 고비중 자활 수요를 집중 처리합니다.
+                </p>
+              </div>
+              <div class="pt-4 border-t border-gray-200 text-xs text-gray-500">
+                선정: 조건부 비중 17~21% 밀집
+              </div>
+            </div>
+
+            <div class="border border-gray-200 bg-gray-50/60 rounded-3xl p-7 flex flex-col justify-between">
+              <div>
+                <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl mb-4">
+                  <i class="fa-solid fa-briefcase"></i>
+                </div>
+                <h3 class="text-xl font-bold text-ink-deep mb-1">자활 집중 연계 거점</h3>
+                <p class="text-xs font-bold text-indigo-600 mb-3">대륜동 또는 남원읍</p>
+                <p class="text-sm text-ink-charcoal leading-relaxed">
+                  수급자 규모와 조건부 비중이 모두 높은 지역에 전담 자활 매니저를 파견하여 밀착형 자립 경로를 지원합니다.
+                </p>
+              </div>
+              <div class="pt-4 border-t border-gray-200 text-xs text-gray-500">
+                선정: Type A 핵심 대표 거점
+              </div>
+            </div>
+
+            <div class="border border-gray-200 bg-gray-50/60 rounded-3xl p-7 flex flex-col justify-between">
+              <div>
+                <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl mb-4">
+                  <i class="fa-solid fa-van-shuttle"></i>
+                </div>
+                <h3 class="text-xl font-bold text-ink-deep mb-1">찾아가는 이동식 복지 상담소</h3>
+                <p class="text-xs font-bold text-emerald-600 mb-3">원거리 취약 읍면 1개소</p>
+                <p class="text-sm text-ink-charcoal leading-relaxed">
+                  대중교통 이동시간이 긴 원거리 읍면을 대상으로 정기 방문 상담을 시행해 복지 전달체계 접근성을 보장합니다.
+                </p>
+              </div>
+              <div class="pt-4 border-t border-gray-200 text-xs text-gray-500">
+                선정: 2단계 접근성 조사 결과 확정
+              </div>
+            </div>
+
+          </div>
+
+          <div class="bg-gray-100 rounded-xl p-3 text-xs text-gray-600 flex justify-between items-center">
+            <span>* 빅데이터 사각지대 탐지 시스템은 개인정보 영향평가 및 인권 보호 지침 마련 이후로 검토 유예</span>
+            <span class="font-bold text-slate-800">현장 중심 전달체계 우선</span>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 10: Balanced KPI Evaluation System -->
+        <!-- ========================================== -->
+        <section class="slide-page bg-white p-12 sm:p-14 justify-between" id="slide-10">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold tracking-widest text-[#0064e0] uppercase">BALANCED EVALUATION</span>
+              <span class="text-xs bg-rose-100 text-rose-800 px-3 py-0.5 rounded-full font-bold">부작용 동시 감시</span>
+            </div>
+            <h2 class="text-3xl font-extrabold text-ink-deep tracking-tight">
+              성과지표 설계 및 부작용 검증 기준
+            </h2>
+            <p class="text-sm text-ink-steel mt-1">
+              단순 수급자 수 감축이나 단기 탈수급률만을 목표로 할 경우 주민 권리가 침해되므로 동시 지표를 운용합니다.
+            </p>
+          </div>
+
+          <!-- Dual Track KPI Cards -->
+          <div class="grid grid-cols-2 gap-8 my-auto">
+            
+            <div class="bg-gray-50/70 border border-gray-200 rounded-3xl p-7 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-900 text-white">핵심 성과 지표 (KPI)</span>
+                <h3 class="text-xl font-bold text-ink-deep mt-3 mb-4">자립 및 업무 효율화 목표</h3>
+                <ul class="space-y-3 text-xs sm:text-sm text-gray-700">
+                  <li class="flex items-start">
+                    <i class="fa-solid fa-check text-blue-600 mt-1 mr-2"></i>
+                    <div><b>조건부수급자 자활 참여율:</b> 실참여자 분기별 산출 (분모: 1,598명 기준 정기 갱신)</div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa-solid fa-check text-blue-600 mt-1 mr-2"></i>
+                    <div><b>12개월 장기 고용유지율:</b> 취업 후 1년간 소득 안정성 유지 및 빈곤 탈출 안착 추적</div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa-solid fa-check text-blue-600 mt-1 mr-2"></i>
+                    <div><b>담당 공무원당 사례수:</b> 읍면동 맞춤형복지팀 과부하 차단 및 상담 밀도 유지</div>
+                  </li>
+                </ul>
+              </div>
+              <p class="pt-3 border-t border-gray-200 text-xs text-gray-500 font-medium">
+                * 단순 탈수급률 단독 목표 설정 전면 금지
+              </p>
+            </div>
+
+            <div class="bg-blue-50/40 border-2 border-blue-300 rounded-3xl p-7 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-600 text-white">병행 모니터링 부작용 지표</span>
+                <h3 class="text-xl font-bold text-blue-950 mt-3 mb-4">권리 침해 및 재빈곤 방지</h3>
+                <ul class="space-y-3 text-xs sm:text-sm text-blue-900">
+                  <li class="flex items-start">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-500 mt-1 mr-2"></i>
+                    <div><b>중도 탈락률 & 강제참여 민원:</b> 자활 비자발적 강제 참여 등 인권 침해 점검</div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-500 mt-1 mr-2"></i>
+                    <div><b>탈수급 후 재수급률:</b> 한계소득 전락 및 1년 내 재진입 여부 지속 추적</div>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-500 mt-1 mr-2"></i>
+                    <div><b>낙인 및 오탐 피해:</b> 사각지대 발굴 시 주민 권익 보호 및 불필요한 행정 개입 방지</div>
+                  </li>
+                </ul>
+              </div>
+              <p class="pt-3 border-t border-blue-200 text-xs text-blue-800 font-bold">
+                주민의 안정된 권리 보장을 최우선 원칙으로 적용
+              </p>
+            </div>
+
+          </div>
+
+          <div class="bg-slate-900 text-white rounded-xl p-3 text-xs text-center">
+            <span class="text-blue-400 font-bold">"측정할 수 없으면 개선할 수 없으나, 잘못 측정하면 복지가 훼손됩니다."</span>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 11: Core Welfare Philosophy -->
+        <!-- ========================================== -->
+        <section class="slide-page bg-white p-12 sm:p-14 justify-between" id="slide-11">
+          <div class="grid grid-cols-2 gap-10 h-full items-center">
+            
+            <div class="h-[520px] rounded-3xl overflow-hidden border border-gray-200 bg-gray-100 shadow-sm relative">
+              <img 
+                src="https://media.istockphoto.com/id/579410588/photo/jeju-island.jpg?s=612x612&w=0&k=20&c=SPCmQYNVscnRbUkkGhhEz859hBSwLv4ZDdgYAPVbqfs=" 
+                alt="서귀포 풍경" 
+                class="w-full h-full object-cover"
+                onerror="this.src='https://placehold.co/800x600/0a1317/ffffff?text=Seogwipo+Welfare'"
+              >
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              <div class="absolute bottom-6 left-6 text-white text-xs">
+                <span class="bg-blue-600 px-2.5 py-1 rounded-full font-bold">SEOGWIPO 2026</span>
+                <p class="mt-2 text-gray-200">데이터 기반의 따뜻하고 정밀한 복지 안전망</p>
+              </div>
+            </div>
+
+            <div class="flex flex-col justify-center pr-6">
+              <span class="text-xs font-bold tracking-widest text-[#0064e0] uppercase mb-4">
+                CORE PHILOSOPHY
+              </span>
+              <h2 class="text-3xl sm:text-4xl font-black text-ink-deep leading-tight mb-6 tracking-tight">
+                "복지의 목표는 감축이 아닌, 필요한 주민의 안정된 생활 보장입니다."
+              </h2>
+              <p class="text-base text-ink-steel leading-relaxed mb-6">
+                서귀포시 17개 읍면동 복지계획은 통계적 숫자를 맞추는 행정이 아닙니다. 지역 밀착형 복지 전달 체계와 과학적 평가를 통하여 취약계층의 지속 가능한 자립과 온전한 삶을 뒷받침하는 실행 체계입니다.
+              </p>
+              
+              <div class="space-y-2.5 text-xs text-ink-charcoal border-t border-gray-200 pt-5">
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                  <span>단일 시점 공공데이터 전수 분석을 통한 사실 기반 의사결정</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                  <span>규모와 조건부 비중을 아우르는 지역 맞춤형 자원 배분</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                  <span>시범 사업 실증을 전제로 한 단계별 재정 투입</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SLIDE 12: Closing / Q&A -->
+        <!-- ========================================== -->
+        <section class="slide-page bg-[#0a1317] text-white p-14 sm:p-16 justify-center items-center text-center" id="slide-12">
+          <div class="w-10 h-1 bg-[#0064e0] rounded-full mb-8"></div>
+          <h2 class="text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">
+            경청해 주셔서 감사합니다
+          </h2>
+          <p class="text-lg text-gray-400 mb-8 max-w-xl">
+            서귀포시 읍면동별 취약계층 종합 지원 계획<br>
+            <span class="text-sm text-gray-500">데이터 검증 기반의 지속 가능한 복지 거버넌스</span>
+          </p>
+          
+          <div class="inline-flex items-center space-x-3 bg-[#1c1e21] border border-gray-800 px-6 py-3 rounded-full">
+            <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping"></span>
+            <span class="text-sm font-bold tracking-widest text-blue-400">Q &amp; A SESSION</span>
+          </div>
+
+          <div class="mt-12 text-xs text-gray-600">
+            보고서 문의: 서귀포시 맞춤형 복지 기획팀 | 기준일: 2024.04 (작성 2026.10)
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Slide Drawer / Quick Slide Thumbnails Modal -->
+  <div id="drawerOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity" onclick="toggleDrawer()">
+    <div class="fixed right-0 top-0 bottom-0 w-80 sm:w-96 bg-gray-900 border-l border-gray-800 p-6 flex flex-col justify-between text-white" onclick="event.stopPropagation()">
+      <div>
+        <div class="flex items-center justify-between pb-4 border-b border-gray-800 mb-4">
+          <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-list text-blue-400"></i>
+            <h3 class="text-base font-bold">슬라이드 목차 (12)</h3>
+          </div>
+          <button onclick="toggleDrawer()" class="text-gray-400 hover:text-white text-lg">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Slide Links List -->
+        <div class="space-y-1.5 overflow-y-auto max-h-[75vh] pr-1" id="drawerList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-gray-800 text-[11px] text-gray-400 flex justify-between">
+        <span>키보드: <b>←</b> <b>→</b> / <b>Space</b></span>
+        <span>전체화면: <b>F</b></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Presenter Mini Guide -->
+  <footer class="w-full bg-[#0a0f18] border-t border-gray-800 text-gray-500 text-xs py-2 px-4 flex justify-between items-center">
+    <div>
+      <span class="font-bold text-gray-400">서귀포시 복지계획 최종보고서 슬라이드 덱</span>
+      <span class="hidden sm:inline"> | 키보드 방향키(←, →)로 슬라이드를 넘길 수 있습니다.</span>
+    </div>
+    <div class="flex items-center space-x-3 text-[11px]">
+      <span class="bg-gray-800 px-2 py-0.5 rounded text-gray-400">F: 전체화면</span>
+      <span class="bg-gray-800 px-2 py-0.5 rounded text-gray-400">M: 목차</span>
+    </div>
+  </footer>
+
+  <script>
+    const totalSlides = 12;
+    let currentSlide = 1;
+
+    const slideTitles = [
+      "01. 표지 (Executive Summary)",
+      "02. 데이터 품질 원칙 및 정정",
+      "03. 서귀포시 복지수급 총괄 현황",
+      "04. 수급 유형별 비중 구조",
+      "05. 규모와 조건부 비중 역전 현상",
+      "06. 주요 읍면동 복지 수급 데이터",
+      "07. 4대 맞춤형 정책 유형 분류",
+      "08. 4단계 점진적 실행 체계",
+      "09. 핵심 시범사업 및 실증 지역",
+      "10. 균형 성과지표 및 부작용 감시",
+      "11. 핵심 복지 철학 및 원칙",
+      "12. 경청 및 Q&A 세션"
+    ];
+
+    function showSlide(slideIndex) {
+      if (slideIndex < 1 || slideIndex > totalSlides) return;
+      currentSlide = slideIndex;
+
+      // Toggle Active Classes
+      document.querySelectorAll('.slide-page').forEach((slide, idx) => {
+        slide.classList.remove('active');
+        if (idx === currentSlide - 1) {
+          slide.classList.add('active');
+        }
+      });
+
+      // Update Header Text & Progress
+      document.getElementById('current-slide-num').innerText = currentSlide;
+      const progressPercent = (currentSlide / totalSlides) * 100;
+      document.getElementById('slideProgressBar').style.width = `${progressPercent}%`;
+
+      // Update Nav Buttons State
+      document.getElementById('prevBtn').disabled = (currentSlide === 1);
+      document.getElementById('nextBtn').disabled = (currentSlide === totalSlides);
+
+      // Update Drawer Active Item
+      renderDrawerItems();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        showSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        showSlide(currentSlide - 1);
+      }
+    }
+
+    // Dynamic 16:9 Aspect Ratio Auto-Scaler
+    function resizeViewport() {
+      const container = document.getElementById('slide-stage-wrapper');
+      const viewport = document.getElementById('slide-viewport');
+      if (!container || !viewport) return;
+
+      const availWidth = window.innerWidth - 32;
+      const availHeight = window.innerHeight - 110; // Minus topbar and footer
+
+      const scaleX = availWidth / 1280;
+      const scaleY = availHeight / 720;
+      const scale = Math.min(scaleX, scaleY, 1.15); // Cap maximum zoom for sharpness
+
+      viewport.style.transform = `scale(${Math.max(scale, 0.25)})`;
+      container.style.width = `${1280 * scale}px`;
+      container.style.height = `${720 * scale}px`;
+    }
+
+    // Slide Drawer Controller
+    function toggleDrawer() {
+      const overlay = document.getElementById('drawerOverlay');
+      overlay.classList.toggle('hidden');
+    }
+
+    function renderDrawerItems() {
+      const list = document.getElementById('drawerList');
+      if (!list) return;
+      list.innerHTML = "";
+
+      slideTitles.forEach((title, idx) => {
+        const slideNo = idx + 1;
+        const isActive = (slideNo === currentSlide);
+        const item = document.createElement('button');
+        item.className = `w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition ${
+          isActive 
+            ? 'bg-blue-600 text-white shadow' 
+            : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+        }`;
+        item.innerHTML = `
+          <span class="truncate">${title}</span>
+          ${isActive ? '<i class="fa-solid fa-play text-[10px] ml-2"></i>' : ''}
+        `;
+        item.onclick = () => {
+          showSlide(slideNo);
+          toggleDrawer();
+        };
+        list.appendChild(item);
+      });
+    }
+
+    // Fullscreen Toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    }
+
+    // Keyboard Shortcuts Listener
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 'm' || e.key === 'M') {
+        toggleDrawer();
+      }
+    });
+
+    // Window Resize Hook
+    window.addEventListener('resize', resizeViewport);
+    window.addEventListener('load', () => {
+      showSlide(1);
+      resizeViewport();
+    });
+  </script>
+</body>
+</html>
